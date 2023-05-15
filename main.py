@@ -44,34 +44,18 @@ def resource_data(resource):
 
 
 # TODO: format data and check resources
-def check_resources(resource, drink):
+def check_resources(drink):
     """Prints what resources are available"""
     # to avoid error out cuz espresso does not contain milk
     if drink == 'espresso':
         MENU[drink]["ingredients"]["milk"] = 0
-    water = MENU[drink]["ingredients"]["water"]
-    milk = MENU[drink]["ingredients"]["milk"]
-    coffee = MENU[drink]["ingredients"]["coffee"]
-    water_resource = resource["water"]
-    milk_resource = resource["milk"]
-    coffee_resource = resource["coffee"]
-    if water_resource < water:
-        print("Sorry there is not enough water")
-        return False
-    elif milk_resource < milk:
-        print("Sorry there is not enough milk")
-        return False
-    elif coffee_resource < coffee:
-        print("Sorry there is not enough coffee")
-        return False
-    else:
-        milk_resource -= milk
-        water_resource -= water
-        coffee_resource -= coffee
-        resource["water"] = water_resource
-        resource["milk"] = milk_resource
-        resource["coffee"] = coffee_resource
-        return True
+    for item in drink:
+        if drink[item] > resources[item]:
+            print(f"Sorry there is not enough {item}")
+            return False
+        else:
+            resources[item] -= drink[item]
+    return True
 
 
 def insert_coins():
@@ -85,7 +69,10 @@ def insert_coins():
     print(f"amount inserted: S{amount}")
     return amount
 
+
 profit = 0
+
+
 def check_coins(drink):
     """Checks if the coins inserted is enough or not"""
     cost = MENU[drink]["cost"]
@@ -110,9 +97,9 @@ while continue_coffee:
         print(resource_data(resources))
     elif user_wants not in MENU:
         print("Try again")
-        user_wants
     else:
-        check = check_resources(resources, user_wants)
+        chosen_drink = MENU[user_wants]
+        check = check_resources(chosen_drink["ingredients"])
         if check:
             check_coins(user_wants)
             print(f"Here is your {user_wants}. Enjoy!")
@@ -123,5 +110,5 @@ while continue_coffee:
 # TODO: check resources are sufficient
 # TODO: process coins
 # TODO: check if transaction is successful
-# TODO: Make cofee
+# TODO: Make coffee
 # TODO: Give Coffee to user
